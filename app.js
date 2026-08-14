@@ -8,7 +8,7 @@ const DEFAULT_PRODUCTS = [
     id: "flower-101",
     name: "Royal Red Rose & Jasmine Wedding Garland (Pair)",
     category: "garland",
-    price: 2499,
+    price: 2999,
     rating: 4.9,
     reviews: 142,
     badge: "Wedding Special",
@@ -45,15 +45,15 @@ const DEFAULT_PRODUCTS = [
   },
   {
     id: "flower-104",
-    name: "Grand Reception Pink Rose & Orchid Jumbo Maalai",
+    name: "Colour Rose Garland",
     category: "wedding",
-    price: 3899,
+    price: 4999,
     rating: 5.0,
     reviews: 64,
     badge: "Royal Collection",
     image: "images/hero_flowers.png",
-    description: "Grand jumbo reception garland crafted with gradient pink roses, rare purple dendrobium orchids, and golden zari tassels. Custom length tailored for grand ceremonies.",
-    flowerTypes: ["Pink Roses", "Purple Orchids", "Gold Zari"],
+    description: "Handcrafted exquisite multi-color rose and carnation garland pair woven with fresh red roses, blush pink carnations, white roses, and baby's breath accents.",
+    flowerTypes: ["Dutch Red Roses", "Blush Pink Carnations", "White Roses", "Baby's Breath"],
     freshnessHours: "Handcrafted on event morning"
   },
   {
@@ -111,7 +111,8 @@ const DEFAULT_PRODUCTS = [
 ];
 
 // App State
-let products = JSON.parse(localStorage.getItem('flora_products')) || DEFAULT_PRODUCTS;
+let products = DEFAULT_PRODUCTS;
+localStorage.setItem('flora_products', JSON.stringify(products));
 let cart = JSON.parse(localStorage.getItem('flora_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('flora_wishlist')) || [];
 let activeCategory = 'all';
@@ -183,6 +184,14 @@ function setupEventListeners() {
 
   // Reset Filters Button
   resetFiltersBtn.addEventListener('click', resetAllFilters);
+
+  // Navbar Links (Home, Product, Contact) Active Toggle & Smooth Scroll
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
   document.getElementById('clearFilterBtn').addEventListener('click', resetAllFilters);
 
   // Cart Drawer Trigger
@@ -199,8 +208,11 @@ function setupEventListeners() {
   // Product Form Submit
   document.getElementById('productForm').addEventListener('submit', handleAddProductSubmit);
 
-  // Custom Garland Form Submit
-  document.getElementById('customGarlandForm').addEventListener('submit', handleCustomGarlandSubmit);
+  // Custom Garland Form Submit (if present)
+  const customGarlandForm = document.getElementById('customGarlandForm');
+  if (customGarlandForm) {
+    customGarlandForm.addEventListener('submit', handleCustomGarlandSubmit);
+  }
 
   // Checkout Form Submit
   document.getElementById('checkoutForm').addEventListener('submit', handleCheckoutSubmit);
@@ -550,7 +562,8 @@ function handleCustomGarlandSubmit(e) {
 }
 
 function scrollToCustomGarland() {
-  document.getElementById('garlandBuilder').scrollIntoView({ behavior: 'smooth' });
+  const el = document.getElementById('contactSection') || document.getElementById('contact');
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
 // Quick View Modal Popup
