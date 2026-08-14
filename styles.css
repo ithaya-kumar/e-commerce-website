@@ -267,6 +267,45 @@ button, input, select, textarea {
   color: var(--emerald-800);
 }
 
+/* Nav Links (Home, Product, Contact) */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--slate-700);
+  transition: all 0.2s ease;
+  padding: 0.4rem 0.2rem;
+  position: relative;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--rose-700);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--rose-600);
+  transition: width 0.2s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
 /* Search Bar */
 .nav-search-wrapper {
   position: relative;
@@ -722,10 +761,165 @@ button, input, select, textarea {
   margin-top: 0.8rem;
 }
 
-/* Custom Garland Builder Card Section */
-.garland-builder-section {
+/* Contact Section */
+.contact-section {
   margin-top: 4.5rem;
+  margin-bottom: 3rem;
 }
+
+.contact-card-container {
+  background: linear-gradient(135deg, #170d12 0%, #2a0812 100%);
+  color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 3.5rem 3rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  text-align: center;
+}
+
+.contact-header {
+  max-width: 650px;
+  margin: 0 auto 3rem auto;
+}
+
+.contact-header h2 {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.8rem;
+  color: #ffffff;
+}
+
+.contact-header p {
+  color: var(--slate-300);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contact-box {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 2.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.whatsapp-box:hover {
+  border-color: rgba(37, 211, 102, 0.6);
+  background: rgba(37, 211, 102, 0.08);
+}
+
+.email-box:hover {
+  border-color: rgba(234, 67, 53, 0.6);
+  background: rgba(234, 67, 53, 0.08);
+}
+
+.contact-icon-wrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-icon {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #ffffff;
+}
+
+.email-icon {
+  background: linear-gradient(135deg, #EA4335, #B31412);
+  color: #ffffff;
+}
+
+.contact-details h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+  color: #ffffff;
+}
+
+.contact-sub {
+  font-size: 0.85rem;
+  color: var(--slate-300);
+  margin-bottom: 0.6rem;
+}
+
+.contact-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold-400);
+  letter-spacing: 0.02em;
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: #ffffff;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.btn-whatsapp:hover {
+  background: #20ba59;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  color: #ffffff;
+}
+
+.btn-email {
+  background: #EA4335;
+  color: #ffffff;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.btn-email:hover {
+  background: #d93829;
+  box-shadow: 0 4px 15px rgba(234, 67, 53, 0.4);
+  color: #ffffff;
+}
+
 
 .builder-card {
   background: linear-gradient(135deg, #170d12 0%, #2a0812 100%);
