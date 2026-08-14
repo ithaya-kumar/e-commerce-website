@@ -58,13 +58,13 @@ const DEFAULT_PRODUCTS = [
   },
   {
     id: "flower-105",
-    name: "Traditional Temple Pooja Lotus & Tulsi Flower Pack",
+    name: "Temple Pooja Thulasi Garland",
     category: "pooja",
     price: 399,
     rating: 4.7,
     reviews: 175,
     badge: "Daily Pooja",
-    image: "images/rose_garland.png",
+    image: "images/temple pooja thulasi garland.png",
     description: "Sacred lotus flowers, sacred tulsi leaves, red hibiscus, and fresh marigold loose flower pack curated for daily home pooja and temple offerings.",
     flowerTypes: ["Pink Lotus", "Sacred Tulsi", "Hibiscus", "Marigold"],
     freshnessHours: "Direct from farm every sunrise"
@@ -110,8 +110,18 @@ const DEFAULT_PRODUCTS = [
   }
 ];
 
-// App State
-let products = JSON.parse(localStorage.getItem('flora_products')) || DEFAULT_PRODUCTS;
+// App State - Sync DEFAULT_PRODUCTS with localStorage so code edits take effect immediately
+let savedProducts = JSON.parse(localStorage.getItem('flora_products')) || [];
+let products = DEFAULT_PRODUCTS.map(defItem => {
+  let saved = savedProducts.find(p => p.id === defItem.id);
+  return saved ? { ...saved, ...defItem } : defItem;
+});
+savedProducts.forEach(savedItem => {
+  if (!DEFAULT_PRODUCTS.some(defItem => defItem.id === savedItem.id)) {
+    products.push(savedItem);
+  }
+});
+localStorage.setItem('flora_products', JSON.stringify(products));
 let cart = JSON.parse(localStorage.getItem('flora_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('flora_wishlist')) || [];
 let activeCategory = 'all';
