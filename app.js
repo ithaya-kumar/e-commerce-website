@@ -2,6 +2,36 @@
    FLORABLOOM & GARLAND CRAFT - APPLICATION LOGIC (JS)
    ========================================================================== */
 
+/* ── Nav Active Link Scroll Spy ────────────────────────────────────────── */
+(function () {
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = ['home', 'products', 'contact'].map(id => document.getElementById(id)).filter(Boolean);
+
+  function setActive(id) {
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+    });
+  }
+
+  // Click: set active immediately
+  navLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      navLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Scroll spy
+  if (sections.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { threshold: 0.35 });
+    sections.forEach(s => observer.observe(s));
+  }
+})();
+
 // Default Seed Catalog Data for Flowers & Garlands
 const DEFAULT_PRODUCTS = [
   {
