@@ -2,7 +2,7 @@
    FLORABLOOM & GARLAND CRAFT - APPLICATION LOGIC (JS)
    ========================================================================== */
 
-/* ── Nav Active Link Scroll Spy ────────────────────────────────────────── */
+/* ── Nav Active Link Scroll Spy & Smooth Scroll ────────────────────────── */
 (function () {
   const navLinks = document.querySelectorAll('.nav-link');
   const sections = ['home', 'products', 'contact'].map(id => document.getElementById(id)).filter(Boolean);
@@ -13,11 +13,24 @@
     });
   }
 
-  // Click: set active immediately
+  // Click: smooth scroll to target section with navbar offset
   navLinks.forEach(link => {
-    link.addEventListener('click', function () {
-      navLinks.forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
+    link.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href').replace('#', '');
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        const navHeight = document.querySelector('.navbar')?.offsetHeight || 70;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      }
     });
   });
 
@@ -49,16 +62,16 @@ const DEFAULT_PRODUCTS = [
   },
   {
     id: "flower-102",
-    name: "Fresh Madurai Jasmine (Mallipoo) Hair Gajra Set",
-    category: "gajra",
-    price: 299,
-    rating: 4.8,
-    reviews: 98,
-    badge: "Fresh Harvest",
+    name: "Royal Jasmine & Pink Lotus Wedding Garland Pair",
+    category: "garland",
+    price: 3499,
+    rating: 4.9,
+    reviews: 128,
+    badge: "Wedding Special",
     image: "images/jasmine_string.png",
-    description: "Thick, highly fragrant hand-strung Madurai Jasmine (Mallipoo) floral string paired with orange marigold accents. Perfect for festive hair decoration & temple wear.",
-    flowerTypes: ["Madurai Jasmine", "Golden Marigold"],
-    freshnessHours: "Picked 4 hours before dispatch"
+    description: "Handcrafted authentic South Indian wedding garland pair woven with fresh white Madurai jasmine buds and tiered pink lotus blossoms laid on lush green lawn.",
+    flowerTypes: ["Madurai Jasmine", "Pink Lotus Buds"],
+    freshnessHours: "Dawn harvest & handcrafted on event day"
   },
   {
     id: "flower-103",
@@ -369,7 +382,7 @@ function getCategoryName(cat) {
 }
 
 // Cart State Operations
-function addToCart(productId, qty = 1, customDetails = null) {
+function addToCart(productId, qty = 1, customDetails = null, evt = null) {
   let itemIndex = -1;
 
   if (customDetails) {
@@ -402,6 +415,11 @@ function addToCart(productId, qty = 1, customDetails = null) {
 
   saveCart();
   updateCartUI();
+  
+  // Trigger animatic particle flight to cart
+  const targetElement = evt ? evt.currentTarget : (window.event ? window.event.target : null);
+  triggerFlyToCartAnimation(targetElement);
+
   showToast("Added to shopping bag!", "success");
 }
 
@@ -800,4 +818,177 @@ function showToast(message, type = "info") {
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
   }, 2800);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REALISTIC ANIMATIC & INTERACTIVE PHYSICS SYSTEM
+   - Falling & Swaying Petals Canvas Engine
+   - 3D Interactive Card Tilt with Light Tracing
+   - Flying Add-to-Cart Blossom Trajectory
+   ══════════════════════════════════════════════════════════════════════════ */
+
+// 1. Canvas Petal Engine
+(function initPetalPhysics() {
+  const canvas = document.getElementById('petalCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let petals = [];
+  const petalColors = [
+    '#b05279', // Rose Mauve
+    '#e5b4d0', // Soft Orchid
+    '#e6dacb', // Cream Linen
+    '#c86c93', // Muted Berry
+    '#ffffff'  // Soft White
+  ];
+
+  function resize() {
+    const parent = canvas.parentElement;
+    width = canvas.width = parent ? parent.offsetWidth : window.innerWidth;
+    height = canvas.height = parent ? parent.offsetHeight : 600;
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Petal {
+    constructor() {
+      this.reset(true);
+    }
+
+    reset(initial = false) {
+      this.x = Math.random() * width;
+      this.y = initial ? Math.random() * height : -20;
+      this.size = Math.random() * 8 + 6;
+      this.speedY = Math.random() * 1.2 + 0.6;
+      this.speedX = Math.random() * 0.8 - 0.4;
+      this.rotation = Math.random() * 360;
+      this.rotSpeed = (Math.random() - 0.5) * 1.8;
+      this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+      this.opacity = Math.random() * 0.6 + 0.3;
+      this.oscillation = Math.random() * 0.05;
+      this.step = Math.random() * 100;
+    }
+
+    update() {
+      this.step += this.oscillation;
+      this.y += this.speedY;
+      this.x += Math.sin(this.step) * 1.2 + this.speedX;
+      this.rotation += this.rotSpeed;
+
+      if (this.y > height + 20) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate((this.rotation * Math.PI) / 180);
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = this.color;
+
+      // Realistic oval petal geometry
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Delicate center fold line
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(-this.size * 0.6, 0);
+      ctx.lineTo(this.size * 0.6, 0);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }
+
+  // Create 35 floating petals
+  for (let i = 0; i < 35; i++) {
+    petals.push(new Petal());
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, width, height);
+    petals.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+
+// 2. 3D Card Tilt Physics & Mouse Light Tracking
+document.addEventListener('mousemove', function (e) {
+  const cards = document.querySelectorAll('.product-card');
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (
+      e.clientX >= rect.left &&
+      e.clientX <= rect.right &&
+      e.clientY >= rect.top &&
+      e.clientY <= rect.bottom
+    ) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+
+      card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+      card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+      card.style.setProperty('--rotate-x', `${rotateX}deg`);
+      card.style.setProperty('--rotate-y', `${rotateY}deg`);
+    } else {
+      card.style.setProperty('--rotate-x', `0deg`);
+      card.style.setProperty('--rotate-y', `0deg`);
+    }
+  });
+});
+
+// 3. Flying Add-to-Cart Blossom Particle Trajectory
+function triggerFlyToCartAnimation(originElement) {
+  const cartBtn = document.getElementById('cartDrawerBtn');
+  if (!cartBtn) return;
+
+  const startRect = originElement ? originElement.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 20, height: 20 };
+  const targetRect = cartBtn.getBoundingClientRect();
+
+  const particle = document.createElement('div');
+  particle.className = 'flying-petal-particle';
+  particle.innerHTML = '🌸';
+  particle.style.left = `${startRect.left + startRect.width / 2}px`;
+  particle.style.top = `${startRect.top + startRect.height / 2}px`;
+  document.body.appendChild(particle);
+
+  requestAnimationFrame(() => {
+    particle.style.transform = `translate(${targetRect.left - startRect.left}px, ${targetRect.top - startRect.top}px) scale(0.3) rotate(360deg)`;
+    particle.style.opacity = '0.2';
+  });
+
+  setTimeout(() => {
+    particle.remove();
+    // Pulse animation on cart button
+    cartBtn.style.transform = 'scale(1.25)';
+    cartBtn.style.transition = 'transform 0.2s ease';
+    setTimeout(() => {
+      cartBtn.style.transform = 'none';
+    }, 250);
+  }, 750);
+}
+
+// Handle Editorial Contact Form Submission
+function handleContactSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('contactFullName').value;
+  showToast(`Thank you ${name}! Your message has been sent to Dhinesh Flowers.`, "success");
+  e.target.reset();
 }
